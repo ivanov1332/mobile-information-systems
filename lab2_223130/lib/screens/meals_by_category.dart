@@ -40,6 +40,7 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -67,8 +68,7 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
             child: GridView.builder(
               padding: const EdgeInsets.all(12),
               itemCount: meals.length,
-              gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
@@ -82,7 +82,8 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MealDetailsScreen(mealId: meal.id),
+                        builder: (context) =>
+                            MealDetailsScreen(mealId: meal.id),
                       ),
                     );
                   },
@@ -91,12 +92,38 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: Image.network(
-                            meal.thumbnail,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
+                          child: Stack(
+                            children: [
+                              // IMAGE
+                              Positioned.fill(
+                                child: Image.network(
+                                  meal.thumbnail,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              ),
+
+                              // HEART ICON
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black54,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
@@ -117,4 +144,5 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
       ),
     );
   }
+
 }

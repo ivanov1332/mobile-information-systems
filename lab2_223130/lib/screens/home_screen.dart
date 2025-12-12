@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/category.dart';
+import 'favorites_screen.dart';
 import 'meals_by_category.dart';
-import 'meal_details.dart'; // обавезно го имаш екранот за детали
+import 'meal_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -54,6 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Meal Categories"),
         actions: [
+          // ⭐ Favorites button (NEW)
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            tooltip: "Favorite Meals",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FavoritesScreen(),
+                ),
+              );
+            },
+          ),
+
+          // 🎲 Random meal
           IconButton(
             icon: const Icon(Icons.casino),
             tooltip: "Random Meal",
@@ -95,35 +111,37 @@ class _HomeScreenState extends State<HomeScreen> {
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    itemCount: filteredCategories.length,
-                    itemBuilder: (context, index) {
-                      final cat = filteredCategories[index];
-                      return Card(
-                        margin: const EdgeInsets.all(10),
-                        child: ListTile(
-                          leading: Image.network(cat.thumbnailUrl, width: 50),
-                          title: Text(cat.name),
-                          subtitle: Text(
-                            cat.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+              itemCount: filteredCategories.length,
+              itemBuilder: (context, index) {
+                final cat = filteredCategories[index];
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    leading: Image.network(cat.thumbnailUrl, width: 50),
+                    title: Text(cat.name),
+                    subtitle: Text(
+                      cat.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MealsByCategoryScreen(
+                            category: cat.name,
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    MealsByCategoryScreen(category: cat.name),
-                              ),
-                            );
-                          },
                         ),
                       );
                     },
                   ),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
+
 }
